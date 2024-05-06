@@ -22,3 +22,7 @@ Route::get('/', function () {
 Route::prefix('/ADM')->group(function(){
     
 });
+
+Route::get('/home', function() {
+    return view('home');
+});
