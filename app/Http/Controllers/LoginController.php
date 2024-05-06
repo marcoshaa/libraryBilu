@@ -12,9 +12,11 @@ class LoginController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->user == "adm@gmail.com") {
-            //$request->session()->regenerate();
-            return route();
+        if ($request->user == "adm@adm.com") {
+                if ($request->password == "123456") {
+                    //$request->session()->regenerate();
+                    return route();
+                }
         }
 
         $data = [
