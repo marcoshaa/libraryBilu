@@ -4,9 +4,8 @@
 
 @endsection
 @section('content')
-<div class="w-full min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+<div class="w-full flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
   <div class="w-full sm:max-w-md p-5 mx-auto">
-    <h2 class="mb-12 text-center text-5xl font-extrabold">{{env('TITLE_PAGE')}}</h2>
     <form>
       <div class="mb-4">
         <label class="block mb-1" for="email">Email</label>

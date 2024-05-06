@@ -10,11 +10,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">
     @yield('style')
 </head>
 <body class="bg-rose-950">
-    @yield('content')
-
+    <x-header/>
+    <div class="min-h-[92vh] bg-gray-50 content-center">
+        @yield('content')
+    </div>
     @yield('script')
 </body>
 </html>
