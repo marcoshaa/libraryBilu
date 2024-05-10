@@ -10,14 +10,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">    
+    <link rel="stylesheet" href="sweetalert2.min.css"> 
     @yield('style')
 </head>
 <body class="bg-rose-950">
     <x-header/>
-    <div class="min-h-[92vh] bg-gray-50 content-center">
+    <div class="min-h-[92vh] bg-gray-50">
         @yield('content')
     </div>
+    <script src="sweetalert2.min.js"></script>
     @yield('script')
 </body>
 </html>
