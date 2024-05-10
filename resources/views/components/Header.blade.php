@@ -5,4 +5,14 @@
             <h2 class="text-3xl font-extrabold">{{env('TITLE_PAGE')}}</h2>    
         </div>
     </div>
+    <nav>
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-center">
+                <div class="flex space-x-4">
+                    <a href="/inicio" class="text-gray-800 border-b-4 border-[#f9fafb] hover:border-[#4c0519] px-3 py-2 text-[18px] font-medium">Inicio</a>
+                    <a href="/perfil" class="text-gray-800 border-b-4 border-[#f9fafb] hover:border-[#4c0519] px-3 py-2 text-[18px] font-medium">Perfil</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </div>
