@@ -23,6 +23,6 @@ Route::prefix('/ADM')->group(function(){
     
 });
 
-Route::get('/home', function() {
+Route::get('/inicio', function() {
     return view('home');
 });
