@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('content')
-    <div class="grid w-full grid grid-cols-1 gap-5">
+    <div class="grid w-full grid-cols-1 gap-5">
         <div class="w-[80%] mt-[2vh] place-self-center">
             <div class="relative">
                 <input type="text" placeholder="Buscar livros..." class="rounded-md w-full pl-2 pr-10 py-2 border-2 border-gray-300 focus:border-gray-600 focus:outline-none">
@@ -10,20 +10,20 @@
                 </button>
             </div>
         </div>
-        <div  class="flex justify-end px-[5vh]">
-            <button class="border-2 rounded-md bg-rose-950 text-white px-[2vh] py-[1vh] text-[18px]">
+        <div class="flex justify-end px-[5vh]">
+            <button id="openModal" class="border-2 rounded-md bg-rose-950 text-white px-[2vh] py-[1vh] text-[18px]">
                 Novo Livro
             </button>
         </div>
         <div class="overflow-x-auto p-[2vh]">
-            <table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
+            <table id="booksTable" class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Imagem
                         </th>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Titulo
+                            Título
                         </th>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Nome do Autor
@@ -35,37 +35,14 @@
                             Valor
                         </th>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Quantidade
+                            Data de Chegada
                         </th>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Data de Chegada
+                            Ações
                         </th>
                     </tr>
                 </thead>
-                <tbody id="bodyTable" class="bg-white divide-y divide-gray-200">                    
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                livro 1
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                eu
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                pt
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                R$ 10,00
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                5
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                11/02/2000
-                            </td>
-                        </tr>
+                <tbody id="bodyTable" class="bg-white divide-y divide-gray-200">
                 </tbody>
             </table>
         </div>
@@ -73,36 +50,49 @@
 @endsection
 
 @section('script')
+
     <script>
         $(document).ready(function() {
+            var table;
+
             function carregarLivros() {
                 $.ajax({
-                    url: 'route(getBooks)',
+                    url: '{{ route("getBooks") }}',
                     type: 'GET',
                     success: function(data) {
                         var tbody = '';
                         data.forEach(function(livro) {
                             tbody += `
-                                <tr>
+                                <tr data-id="${livro.id}">
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        <img src="${livro.imagem}" alt="${livro.nome}" class="h-10 w-10 rounded-full">
+                                        <img src="${livro.image_url}" alt="${livro.title}" class="h-10 w-10 rounded-full">
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        ${livro.autor}
+                                        ${livro.title}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        ${livro.idioma}
+                                        ${livro.author}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        R$ ${livro.valor}
+                                        ${livro.language}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        ${livro.data_chegada}
+                                        R$ ${livro.price}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                                        ${livro.arrival_date}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                                        <button class="edit-btn bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
                                     </td>
                                 </tr>
                             `;
                         });
                         $('#bodyTable').html(tbody);
+                        if ($.fn.DataTable.isDataTable('#booksTable')) {
+                            table.destroy();
+                        }
+                        table = $('#booksTable').DataTable();
                     },
                     error: function(error) {
                         console.log(error);
@@ -112,44 +102,90 @@
 
             carregarLivros();
 
-            $('button').click(function() {
-                carregarLivros();
+            $('#openModal').click(function() {
+                Swal.fire({
+                    title: 'Cadastro de Livro',
+                    html: `
+                        <form id="bookForm" enctype="multipart/form-data">
+                            <input type="text" id="title" name="title" class="swal2-input" placeholder="Título do Livro" required>
+                            <input type="text" id="author" name="author" class="swal2-input" placeholder="Autor" required>
+                            <input type="text" id="language" name="language" class="swal2-input" placeholder="Idioma" required>
+                            <input type="number" id="price" name="price" class="swal2-input" placeholder="Preço" required>
+                            <input type="date" id="arrival_date" name="arrival_date" class="swal2-input" required>
+                            <input type="file" id="image" name="image" class="swal2-input" required>
+                        </form>
+                    `,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const form = document.getElementById('bookForm');
+                        const formData = new FormData(form);
+                        return $.ajax({
+                            url: '{{ route("createBook") }}',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                        });
+                    },
+                    confirmButtonText: 'Cadastrar Livro',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Sucesso!', 'O livro foi cadastrado.', 'success');
+                        carregarLivros();
+                    }
+                });
+            });
+
+            $('#bodyTable').on('click', '.edit-btn', function() {
+                var row = $(this).closest('tr');
+                var id = row.data('id');
+                var livro = {
+                    title: row.find('td:eq(1)').text(),
+                    author: row.find('td:eq(2)').text(),
+                    language: row.find('td:eq(3)').text(),
+                    price: row.find('td:eq(4)').text().replace('R$ ', ''),
+                    arrival_date: row.find('td:eq(5)').text(),
+                    image_url: row.find('img').attr('src'),
+                };
+
+                Swal.fire({
+                    title: 'Editar Livro',
+                    html: `
+                        <form id="editBookForm" enctype="multipart/form-data">
+                            <input type="text" id="edit_title" name="title" class="swal2-input" placeholder="Título do Livro" value="${livro.title}" required>
+                            <input type="text" id="edit_author" name="author" class="swal2-input" placeholder="Autor" value="${livro.author}" required>
+                            <input type="text" id="edit_language" name="language" class="swal2-input" placeholder="Idioma" value="${livro.language}" required>
+                            <input type="number" id="edit_price" name="price" class="swal2-input" placeholder="Preço" value="${livro.price}" required>
+                            <input type="date" id="edit_arrival_date" name="arrival_date" class="swal2-input" value="${livro.arrival_date}" required>
+                            <input type="file" id="edit_image" name="image" class="swal2-input">
+                            <img src="${livro.image_url}" alt="${livro.title}" class="swal2-input" style="height: 100px;">
+                        </form>
+                    `,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const form = document.getElementById('editBookForm');
+                        const formData = new FormData(form);
+                        formData.append('_method', 'PUT');
+                        return $.ajax({
+                            url: '{{ url("books") }}/' + id,
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                        });
+                    },
+                    confirmButtonText: 'Atualizar Livro',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Sucesso!', 'O livro foi atualizado.', 'success');
+                        carregarLivros();
+                    }
+                });
             });
         });
-
-        document.getElementById('openModal').addEventListener('click', function() {
-            Swal.fire({
-                title: 'Cadastro de Livro',
-                html: `
-                    <form id="bookForm">
-                        <input type="text" id="titulo" name="titulo" class="swal2-input" placeholder="Título do Livro" required>
-                        <input type="text" id="autor" name="autor" class="swal2-input" placeholder="Autor" required>
-                        <input type="text" id="idioma" name="idioma" class="swal2-input" placeholder="Idioma" required>
-                        <input type="text" id="valor" name="valor" class="swal2-input" placeholder="Preço" required>
-                        <input type="date" id="data_chegada" name="data_chegada" class="swal2-input" required>
-                        <input type="file" id="imagem" name="imagem" class="swal2-input" required>
-                    </form>
-                `,
-                focusConfirm: false,
-                preConfirm: () => {
-                    const form = document.getElementById('bookForm');
-                    const formData = new FormData(form);
-                    $.ajax({
-                        url: 'route(creatBook)',
-                        type: 'GET',
-                        data: formData,
-                    });
-                },
-                confirmButtonText: 'Cadastrar Livro',
-                showCancelButton: true,
-                cancelButtonText: 'Cancelar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Aqui você pode tratar a resposta do servidor
-                    Swal.fire('Sucesso!', 'O livro foi cadastrado.', 'success');
-                }
-            });
-        });
-
     </script>
 @endsection

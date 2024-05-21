@@ -26,3 +26,9 @@ Route::prefix('/ADM')->group(function(){
 Route::get('/inicio', function() {
     return view('home');
 });
+
+Route::prefix('/livros')->group(function(){
+    Route::get('/', [BookController::class, 'index'])->name('getBooks');
+    Route::post('/criar', [BookController::class, 'create'])->name('createBook');
+    Route::put('/editar/{id}', [BookController::class, 'update'])->name('updateBook');
+});

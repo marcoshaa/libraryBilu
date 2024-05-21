@@ -10,16 +10,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">    
-    <link rel="stylesheet" href="sweetalert2.min.css"> 
+    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     @yield('style')
 </head>
 <body class="bg-rose-950">
     <x-header/>
     <div class="min-h-[92vh] bg-gray-50">
         @yield('content')
-    </div>
-    <script src="sweetalert2.min.js"></script>
+    </div>    
     @yield('script')
 </body>
 </html>
