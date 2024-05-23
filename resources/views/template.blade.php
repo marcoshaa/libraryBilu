@@ -22,6 +22,11 @@
     <div class="min-h-[92vh] bg-gray-50">
         @yield('content')
     </div>    
+    <script>
+        $("#deslogar").click(function (){
+            $("#logout-form").submit();
+        });
+    </script>
     @yield('script')
 </body>
 </html>

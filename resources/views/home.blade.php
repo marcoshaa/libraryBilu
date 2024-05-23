@@ -35,7 +35,7 @@
                             Valor
                         </th>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Data de Chegada
+                            Ano de Lançamento
                         </th>
                         <th scope="col" class="px-6 py-3 border text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Ações
@@ -80,7 +80,7 @@
                                         R$ ${livro.price}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        ${livro.arrival_date}
+                                        ${livro.published_year}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
                                         <button class="edit-btn bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
@@ -106,14 +106,18 @@
                 Swal.fire({
                     title: 'Cadastro de Livro',
                     html: `
-                        <form id="bookForm" enctype="multipart/form-data">
-                            <input type="text" id="title" name="title" class="swal2-input" placeholder="Título do Livro" required>
-                            <input type="text" id="author" name="author" class="swal2-input" placeholder="Autor" required>
-                            <input type="text" id="language" name="language" class="swal2-input" placeholder="Idioma" required>
-                            <input type="number" id="price" name="price" class="swal2-input" placeholder="Preço" required>
-                            <input type="date" id="arrival_date" name="arrival_date" class="swal2-input" required>
-                            <input type="file" id="image" name="image" class="swal2-input" required>
-                        </form>
+                    <form id="bookForm" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+                        @csrf
+                        <div class="grid grid-cols-1 gap-4">
+                            <input type="text" id="title" name="title" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Título do Livro" required>
+                            <input type="text" id="author" name="author" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Autor" required>
+                            <input type="text" id="language" name="language" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Idioma" required>
+                            <input type="number" id="price" name="price" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Preço" required>
+                            <input type="number" id="year" name="year" min="1900" max="2099" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="2024" required>
+                            <input type="number" id="quantity" name="quantity" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" required>
+                            <input type="file" id="image" name="image" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="quantidade" required>
+                        </div>                        
+                    </form>
                     `,
                     focusConfirm: false,
                     preConfirm: () => {
@@ -153,14 +157,18 @@
                 Swal.fire({
                     title: 'Editar Livro',
                     html: `
-                        <form id="editBookForm" enctype="multipart/form-data">
-                            <input type="text" id="edit_title" name="title" class="swal2-input" placeholder="Título do Livro" value="${livro.title}" required>
-                            <input type="text" id="edit_author" name="author" class="swal2-input" placeholder="Autor" value="${livro.author}" required>
-                            <input type="text" id="edit_language" name="language" class="swal2-input" placeholder="Idioma" value="${livro.language}" required>
-                            <input type="number" id="edit_price" name="price" class="swal2-input" placeholder="Preço" value="${livro.price}" required>
-                            <input type="date" id="edit_arrival_date" name="arrival_date" class="swal2-input" value="${livro.arrival_date}" required>
-                            <input type="file" id="edit_image" name="image" class="swal2-input">
-                            <img src="${livro.image_url}" alt="${livro.title}" class="swal2-input" style="height: 100px;">
+                        <form id="editBookForm" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+                            @csrf
+                            <div class="grid grid-cols-1 gap-4">
+                                <input type="text" id="edit_title" name="title" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Título do Livro" value="${livro.title}" required>
+                                <input type="text" id="edit_author" name="author" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Autor" value="${livro.author}" required>
+                                <input type="text" id="edit_language" name="language" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Idioma" value="${livro.language}" required>
+                                <input type="number" id="edit_price" name="price" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" placeholder="Preço" value="${livro.price}" required>
+                                <input type="date" id="edit_arrival_date" name="arrival_date" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" value="${livro.arrival_date}" required>
+                                <input type="number" id="edit_quantity" name="edit_quantity" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500" value="${livro.quantity}" required>
+                                <input type="file" id="edit_image" name="image" class="swal2-input p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500">
+                                <img src="${livro.image_url}" alt="${livro.title}" class="mt-4 w-full h-48 object-cover rounded-md">
+                            </div>
                         </form>
                     `,
                     focusConfirm: false,

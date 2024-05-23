@@ -1,25 +1,14 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string|null
-     */
-    public function handle($request, Closure $next)
+    protected function redirectTo($request)
     {
-        if (!auth()->check()) {
-            // User is not authenticated, redirect to the login page
-            return redirect()->route('login')->with('error', 'Please log in to access this page.');
+        if (!$request->expectsJson()) {
+            return route('index');
         }
-
-        // User is authenticated, allow the request to proceed
-        return $next($request);
     }
 }

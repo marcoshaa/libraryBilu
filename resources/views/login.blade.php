@@ -11,8 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="sweetalert2.min.css">
+    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">    
     @yield('style')
 </head>
 
@@ -28,7 +27,14 @@
     <div class="min-h-[92vh] bg-gray-50">
         <div class="w-full flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
             <div class="w-full sm:max-w-md p-5 mx-auto m-[20vh]">
-                <form>
+                <form action="{{ route('login') }}" method="POST">
+                    @csrf
+                    @if(session('error'))
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <strong class="font-bold">Erro!</strong>
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        </div>
+                    @endif
                     <div class="mb-4">
                         <label class="block mb-1" for="email">Email</label>
                         <input id="email" type="text" name="email"
@@ -54,8 +60,6 @@
             </div>
         </div>
     </div>
-    <script src="sweetalert2.min.js"></script>
-
 </body>
 
 </html>

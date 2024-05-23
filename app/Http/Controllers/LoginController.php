@@ -10,37 +10,31 @@ use Redirect;
 use Hash;
 class LoginController extends Controller
 {
-    public function index(Request $request)
-    {
-        if ($request->user == "adm@adm.com") {
-                if ($request->password == "123456") {
-                    //$request->session()->regenerate();
-                    return route();
-                }
-        }
+    public function login(Request $request)
+    {        
 
         $data = [
-            'email'=>$request->user,
+            'email'=>$request->email,
             'password'=>$request->password
         ];
-
         $userValidator = $this->validadorCred($data['email'],$data['password']);
         
-        if($userValidator[0] == '1'){            
-            return ['falha',$userValidator[1]];
+        if($userValidator[0] == '1'){         
+            return back()->with('error', $userValidator[1]);   
+            // return ['falha',$userValidator[1]];
         }
         $check = $userValidator[1];
         
-        //$check = User::where('email',$data['email'])->first();
+        $check = User::where('email',$data['email'])->first();
         if(empty($check)){
             
             return ['falha','Email e/ou Senha incorretos'];
         }else{     
+            //dd(['email' => $data['email'], 'password' => $data['password']]);
             if(Hash::check($data['password'], $check->password)){       
                 if(Auth::attempt($data)){
-                    //dd(['email' => $data['email'], 'password' => $data['password']]);
                     $request->session()->regenerate();                        
-                    return ['sucesso',route('inicio')];
+                    return redirect()->intended('inicio');
                 }  
             }    
         }
@@ -48,7 +42,12 @@ class LoginController extends Controller
 
     public function logout(){        
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('index');
+    }
+    
+    public function index()
+    {        
+        return view('login');
     }
 
     protected function validadorCred($email,$senha){        
@@ -58,13 +57,13 @@ class LoginController extends Controller
         //caso nao ache o  email
         if(empty($check)){
             $msg[0]='1';
-            $msg[1] = 'Email não encontrado';
+            $msg[1]='Email não encontrado';
         }
         //caso nao ache a senha
         if(!empty($senha)){
-            if(strlen($senha) < 6){
+            if(strlen($senha) < 3){
                 $msg[0]='1';
-                $msg[1] = 'É necessário no mínimo 6 caracteres na senha!';
+                $msg[1] = 'É necessário no mínimo 3 caracteres na senha!';
             }else if(strlen($senha) > 6){
                 $msg[0]='1';
                 $msg[1] = 'É no máximo 6 caracteres no senha!';

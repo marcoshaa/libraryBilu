@@ -12,8 +12,10 @@ class CreateBooksTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('author');
+            $table->string('language',2);
             $table->decimal('price', 8, 2);
             $table->integer('published_year');
+            $table->string('image_url');
             $table->timestamps();
         });
     }
